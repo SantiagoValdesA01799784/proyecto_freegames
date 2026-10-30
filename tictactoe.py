@@ -1,11 +1,13 @@
-"""Tic Tac Toe
+"""Gato (Tic Tac Toe)
 
-Exercises
+Juego modificado por Santiago Valdés Cruz (A01799784).
 
-1. Give the X and O a different color and width.
-2. What happens when someone taps a taken spot?
-3. How would you detect when someone has won?
-4. How could you create a computer player?
+Ejercicios
+
+1. Darle a la X y a la O un color y grosor diferente.
+2. ¿Qué pasa cuando alguien toca una casilla ocupada?
+3. ¿Cómo detectarías cuando alguien ganó?
+4. ¿Cómo podrías crear un jugador controlado por la computadora?
 """
 
 from turtle import *
@@ -14,7 +16,7 @@ from freegames import line
 
 
 def grid():
-    """Draw tic-tac-toe grid."""
+    """Dibuja las líneas del tablero del gato."""
     line(-67, 200, -67, -200)
     line(67, 200, 67, -200)
     line(-200, -67, 200, -67)
@@ -22,7 +24,7 @@ def grid():
 
 
 def drawx(x, y):
-    """Draw X player."""
+    """Dibuja la X del jugador 1."""
     # Modificación 1: X roja, más gruesa, más pequeña y centrada en la casilla
     color('red')
     width(10)
@@ -31,7 +33,7 @@ def drawx(x, y):
 
 
 def drawo(x, y):
-    """Draw O player."""
+    """Dibuja la O del jugador 2."""
     # Modificación 1: O azul, más gruesa, de radio 40 y centrada en la casilla
     color('blue')
     width(10)
@@ -42,13 +44,14 @@ def drawo(x, y):
 
 
 def floor(value):
-    """Round value down to grid with square size 133."""
+    """Redondea el valor hacia abajo a la casilla del tablero (tamaño 133)."""
     return ((value + 200) // 133) * 133 - 200
 
 
 # Modificación 2: 'board' guarda las casillas ocupadas y quién las ocupó
 # Modificación 3: 'over' indica si el juego ya terminó
 state = {'player': 0, 'board': {}, 'over': False}
+# Nombres de los jugadores: 0 = X, 1 = O
 names = ['X', 'O']
 
 # Modificación 2: coordenadas válidas de las 3 columnas/filas del tablero
@@ -64,7 +67,7 @@ wins.append([(cells[i], cells[2 - i]) for i in range(3)])
 
 
 def winner():
-    """Return the winning player or None."""
+    """Regresa el jugador ganador o None si nadie ha ganado."""
     board = state['board']
     for combo in wins:
         values = [board.get(cell) for cell in combo]
@@ -74,7 +77,7 @@ def winner():
 
 
 def message(text):
-    """Write a message in the center of the board."""
+    """Escribe un mensaje en el centro del tablero."""
     up()
     goto(0, -20)
     color('green')
@@ -82,11 +85,12 @@ def message(text):
     update()
 
 
+# Funciones para dibujar a cada jugador
 players = [drawx, drawo]
 
 
 def tap(x, y):
-    """Draw X or O in tapped square."""
+    """Dibuja X u O en la casilla que se tocó."""
     # Modificación 3: si el juego ya terminó se ignoran los clics
     if state['over']:
         return
@@ -119,9 +123,11 @@ def tap(x, y):
         message('Empate')
         return
 
+    # Cambia el turno al otro jugador
     state['player'] = not player
 
 
+# Configuración de la ventana y arranque del juego
 setup(420, 420, 370, 0)
 hideturtle()
 tracer(False)
