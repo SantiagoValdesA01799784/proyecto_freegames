@@ -23,16 +23,22 @@ def grid():
 
 def drawx(x, y):
     """Draw X player."""
-    line(x, y, x + 133, y + 133)
-    line(x, y + 133, x + 133, y)
+    # Modificación 1: X roja, más gruesa, más pequeña y centrada en la casilla
+    color('red')
+    width(10)
+    line(x + 30, y + 30, x + 103, y + 103)
+    line(x + 30, y + 103, x + 103, y + 30)
 
 
 def drawo(x, y):
     """Draw O player."""
+    # Modificación 1: O azul, más gruesa, de radio 40 y centrada en la casilla
+    color('blue')
+    width(10)
     up()
-    goto(x + 67, y + 5)
+    goto(x + 66.5, y + 26.5)
     down()
-    circle(62)
+    circle(40)
 
 
 def floor(value):
