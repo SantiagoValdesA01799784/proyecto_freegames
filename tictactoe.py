@@ -46,7 +46,11 @@ def floor(value):
     return ((value + 200) // 133) * 133 - 200
 
 
-state = {'player': 0}
+# Modificación 2: 'board' guarda las casillas ocupadas y quién las ocupó
+state = {'player': 0, 'board': {}}
+
+# Modificación 2: coordenadas válidas de las 3 columnas/filas del tablero
+cells = [-200, -67, 66]
 players = [drawx, drawo]
 
 
@@ -54,7 +58,17 @@ def tap(x, y):
     """Draw X or O in tapped square."""
     x = floor(x)
     y = floor(y)
+
+    # Modificación 2: se ignoran los clics fuera del tablero
+    if x not in cells or y not in cells:
+        return
+
+    # Modificación 2: si la casilla ya está ocupada no se dibuja nada
+    if (x, y) in state['board']:
+        return
+
     player = state['player']
+    state['board'][(x, y)] = player
     draw = players[player]
     draw(x, y)
     update()
