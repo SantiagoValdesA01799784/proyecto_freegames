@@ -47,15 +47,50 @@ def floor(value):
 
 
 # Modificación 2: 'board' guarda las casillas ocupadas y quién las ocupó
-state = {'player': 0, 'board': {}}
+# Modificación 3: 'over' indica si el juego ya terminó
+state = {'player': 0, 'board': {}, 'over': False}
+names = ['X', 'O']
 
 # Modificación 2: coordenadas válidas de las 3 columnas/filas del tablero
 cells = [-200, -67, 66]
+
+# Modificación 3: las 8 combinaciones ganadoras (3 filas, 3 columnas, 2 diagonales)
+wins = []
+for c in cells:
+    wins.append([(c, r) for r in cells])
+    wins.append([(r, c) for r in cells])
+wins.append([(cells[i], cells[i]) for i in range(3)])
+wins.append([(cells[i], cells[2 - i]) for i in range(3)])
+
+
+def winner():
+    """Return the winning player or None."""
+    board = state['board']
+    for combo in wins:
+        values = [board.get(cell) for cell in combo]
+        if values[0] is not None and values.count(values[0]) == 3:
+            return values[0]
+    return None
+
+
+def message(text):
+    """Write a message in the center of the board."""
+    up()
+    goto(0, -20)
+    color('green')
+    write(text, align='center', font=('Arial', 32, 'bold'))
+    update()
+
+
 players = [drawx, drawo]
 
 
 def tap(x, y):
     """Draw X or O in tapped square."""
+    # Modificación 3: si el juego ya terminó se ignoran los clics
+    if state['over']:
+        return
+
     x = floor(x)
     y = floor(y)
 
@@ -72,6 +107,18 @@ def tap(x, y):
     draw = players[player]
     draw(x, y)
     update()
+
+    # Modificación 3: revisa si alguien ganó o si hubo empate
+    ganador = winner()
+    if ganador is not None:
+        state['over'] = True
+        message('Ganó ' + names[ganador])
+        return
+    if len(state['board']) == 9:
+        state['over'] = True
+        message('Empate')
+        return
+
     state['player'] = not player
 
 
